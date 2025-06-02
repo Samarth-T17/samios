@@ -41,8 +41,8 @@ func runModels() -> String {
             // Dummy input tensors matching your Python script
             // Adjust dimensions and values as needed
             let image = try MLMultiArray(shape: [3, 256, 256], dataType: .float32)
-            let input_ids = try MLMultiArray(shape: [1, 12], dataType: .int64)
-            let attention_mask = try MLMultiArray(shape: [1, 12], dataType: .int64)
+            let input_ids = try MLMultiArray(shape: [1, 12], dataType: .int32)
+            let attention_mask = try MLMultiArray(shape: [1, 12], dataType: .int32)
 
             // Fill with dummy values (e.g., 0.5 for image, 0 for input_ids, 1 for attention_mask)
             for i in 0..<image.count {
