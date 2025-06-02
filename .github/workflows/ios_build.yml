@@ -1,3 +1,4 @@
+
 name: Build Flutter iOS App
 
 on:
@@ -23,14 +24,16 @@ jobs:
           flutter-version: "3.29.0"
           cache: true
 
-      - name: Install Python and gdown
+      - name: Create Python venv and install gdown
         run: |
-          brew install python
-          pip3 install gdown
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install gdown
 
-     
       - name: Download and Extract Models
         run: |
+          source venv/bin/activate
           gdown --id 1NeZqgIzOEI3fGUMoeAYf6wYhCptYym11 -O upload.zip
           unzip upload.zip
           mv upload/Model1.mlpackage ios/Runner/
@@ -53,4 +56,3 @@ jobs:
         with:
           name: ios-build
           path: build/ios/iphoneos
-
