@@ -1,0 +1,56 @@
+name: Build Flutter iOS App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.29.0"
+          cache: true
+
+      - name: Install Python and gdown
+        run: |
+          brew install python
+          pip3 install gdown
+
+     
+      - name: Download and Extract Models
+        run: |
+          gdown --id 1NeZqgIzOEI3fGUMoeAYf6wYhCptYym11 -O upload.zip
+          unzip upload.zip
+          mv upload/Model1.mlpackage ios/Runner/
+          mv upload/Model2.mlpackage ios/Runner/
+
+      - name: Verify Flutter Installation
+        run: flutter doctor
+
+      - name: Ensure Stable Flutter Channel
+        run: flutter channel stable
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build iOS App (No Code Signing)
+        run: flutter build ios --no-codesign
+
+      - name: Upload iOS Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: build/ios/iphoneos
+
